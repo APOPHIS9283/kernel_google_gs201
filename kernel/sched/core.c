@@ -1994,7 +1994,6 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
 	const struct cpumask *cpu_allowed_mask = task_cpu_possible_mask(p);
 	unsigned int dest_cpu = nr_cpu_ids;
 	int ret = 0;
-
 	update_rq_clock(rq);
 
 	if (p->flags & PF_KTHREAD) {
@@ -2085,9 +2084,13 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
 	struct rq *rq;
 	
 	/* Don't allow perf-critical threads to have non-perf affinities */
-	if ((p->flags & PF_PERF_CRITICAL) && new_mask != cpu_perf_mask &&
-		new_mask != cpu_perf_mask &&
-	  	new_mask != cpu_prime_mask)
+	if ((p->pc_flags & PC_PRIME_AFFINE) && new_mask != cpu_prime_mask)
+		return -EINVAL;
+
+	if ((p->pc_flags & PC_PERF_AFFINE) && new_mask != cpu_perf_mask)
+		return -EINVAL;
+
+	if ((p->pc_flags & PC_LITTLE_AFFINE) && new_mask != cpu_lp_mask)
 		return -EINVAL;
 
 	rq = task_rq_lock(p, &rf);
