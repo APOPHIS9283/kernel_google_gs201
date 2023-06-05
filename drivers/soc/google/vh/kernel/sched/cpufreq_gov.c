@@ -1418,7 +1418,7 @@ static int sugov_kthread_create(struct sugov_policy *sg_policy)
 	ret = sched_setattr_nocheck(thread, &attr);
 	if (ret) {
 		kthread_stop(thread);
-		pr_warn("%s: failed to set SCHED_FIFO\n", __func__);
+		pr_warn("%s: failed to set SCHED_RR\n", __func__);
 		return ret;
 	}
 
