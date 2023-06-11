@@ -1963,14 +1963,14 @@ static int do_execveat_common(int fd, struct filename *filename,
 		if (unlikely(!strncmp(filename->name,
 					   HWCOMPOSER_BIN_PREFIX,
 					   strlen(HWCOMPOSER_BIN_PREFIX)))) {
-			current->pc_flags |= PC_HP_AFFINE;
-			set_cpus_allowed_ptr(current, cpu_hp_mask);
+			current->pc_flags |= PC_PERF_AFFINE;
+			set_cpus_allowed_ptr(current, cpu_perf_mask);
 		}
 		else if (unlikely(!strncmp(filename->name,
 					   SFLINGER_BIN_PREFIX,
 					   strlen(SFLINGER_BIN_PREFIX)))) {
-			current->pc_flags |= PC_HP_AFFINE;
-			set_cpus_allowed_ptr(current, cpu_hp_mask);
+			current->pc_flags |= PC_PERF_AFFINE;
+			set_cpus_allowed_ptr(current, cpu_perf_mask);
 		}
 	}
 
